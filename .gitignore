@@ -131,3 +131,4 @@ dmypy.json
 # Spider picture
 *.jpg
 *.txt
+result/
