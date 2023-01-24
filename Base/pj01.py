@@ -1,5 +1,5 @@
 #!/bin/python3
-#-*- coding : utf-8 -*-
+#-*- coding:utf-8 -*-
 
 def even_num(x):
     if (x % 2 == 0):
