@@ -1,8 +1,11 @@
 #!/bin/python3
 # -*- coding : utf-8 -*-
 
+###invoke multiprocessing
+
 import requests, re, os
 import time, sys
+from multiprocessing import Process
 
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
 
@@ -23,12 +26,16 @@ def process_sigle(x, y):
         with open(f_name, "wb") as f:
             save_picture(i[0], f)
 
-if (__name__ == '__main__'):
-    t1= time.time()
-    res_list = []
+
+if (__name__ == "__main__"):
+
+    t1 = time.time()
+
     print("parent process start...")
+    res_list = []
     count = re.findall(r'[\S\s]*?<span class="count">\(共(\d+)条\)</span>', get_contents())
     count = int(count[0])
+
     for i in range(0, count, 25):
         contents = get_contents(i)
         results = re.findall(r'\s<li>\s+<div class="item">[\s\S]+?<img width="100".+?src="(.+?)"[\S\s]+?<span class="title">(.+?)</span>', contents)
@@ -39,17 +46,18 @@ if (__name__ == '__main__'):
         os.mkdir("douban")
     else:
         pass
-    
-    #multiprocess
-    pid_0 = os.fork()
-    
-    if (pid_0 == 0):
-        process_sigle(0, count//2)
-        os._exit(0)
-    else:
-        process_sigle(count//2, count)
-    
+
+    p1 = Process(target = process_sigle, args = (0, count//2))
+    p2 = Process(target = process_sigle, args = (count//2, count))
+    p1.start()
+    p2.start()
+    print("subprocess start...")
+    p1.join()
+    p2.join()
+    print("parent process done")
+
     t2 = time.time()
-    print("run time is %d" %(t2-t1))
+    print("Run time is %d" %(t2 - t1))
     sys.exit(0)
+
 
