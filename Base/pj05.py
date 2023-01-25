@@ -1,7 +1,7 @@
 #!/bin/python3
 # -*- coding:utf-8 -*-
 import os, sys, time
-
+import threading
 #prime num
 
 def cal_num(num):
@@ -33,29 +33,10 @@ def single_process(x, y):
         save_res(f_name, res)
         time.sleep(0.5)
 if (__name__ == "__main__"):
-    t1 = time.time()
+    time1 = time.time()
     if (not os.path.exists("result")):
         os.mkdir("result")
-
-    ###multiprocess invoke by os.fork()
-
-    pid_0 = os.fork()
-    pid_1 = os.fork()
-    pid_2 = os.fork()
-
-    if (pid_0 == 0):
-        single_process(1, 100//4)
-        os._exit(0)
-    elif (pid_1 == 0):
-        single_process(100//4, 100//2)
-        os._exit(0)       
-    elif (pid_2 == 0):
-        single_process(100//2, 300//4)
-        os._exit(0)
-    else:
-        single_process(300//4, 100)
-
-    t2 = time.time()
-
-    print("Run_time is %d" %(t2-t1))
+    single_process(1, 100)
+    time2 = time.time()
+    print("Run_time is %d" %(time2-time1))
     sys.exit(0)

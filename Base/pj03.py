@@ -1,5 +1,5 @@
 #!/bin/python3
-# -*- coding : utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import os
 import time, sys
@@ -21,7 +21,7 @@ if (__name__ == "__main__"):
         my_print("sounds\n")
         time.sleep(1)
         my_print("test\n")
-        #os._exit(0)
+        os._exit(0)
     else:
         my_print("video\n")
     

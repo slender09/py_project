@@ -1,11 +1,11 @@
 #!/bin/python3
 # -*- coding:utf-8 -*-
 
-###invoke multiprocessing
+###invoke threading
 
 import requests, re, os
 import time, sys
-from multiprocessing import Process
+import threading
 
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
 
@@ -29,7 +29,7 @@ def process_sigle(x, y):
 
 if (__name__ == "__main__"):
 
-    t1 = time.time()
+    time1 = time.time()
 
     print("parent process start...")
     res_list = []
@@ -47,17 +47,17 @@ if (__name__ == "__main__"):
     else:
         pass
 
-    p1 = Process(target = process_sigle, args = (0, count//2))
-    p2 = Process(target = process_sigle, args = (count//2, count))
-    p1.start()
-    p2.start()
-    print("subprocess start...")
-    p1.join()
-    p2.join()
+    t1 = threading.Thread(target = process_sigle, args = (0, count//2))
+    t2 = threading.Thread(target = process_sigle, args = (count//2, count))
+    t1.start()
+    t2.start()
+    print("thread start...")
+    t1.join()
+    t2.join()
     print("parent process done")
 
-    t2 = time.time()
-    print("Run time is %d" %(t2 - t1))
+    time2 = time.time()
+    print("Run time is %0.2f" %(time2 - time1))
     sys.exit(0)
 
 

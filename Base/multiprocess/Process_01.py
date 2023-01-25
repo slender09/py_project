@@ -1,5 +1,5 @@
 #!/bin/python3
-# -*- coding : utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import os, sys, time, random
 from multiprocessing import Pool
