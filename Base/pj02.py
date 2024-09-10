@@ -3,10 +3,9 @@
 import os, sys, time
 
 #prime num
-
 def cal_num(num):
     flag = 1
-    if (num == 1):
+    if ((num == 1) or (num == 0)):
         flag = 0
     elif (num ==2):
         flag = 1
@@ -32,30 +31,30 @@ def single_process(x, y):
         f_name = os.path.join("result", "is_prime_num_"+str(i))
         save_res(f_name, res)
         time.sleep(0.5)
-if (__name__ == "__main__"):
+
+if ( __name__ == "__main__" ):
     t1 = time.time()
+    print("start main process pid is %d, ppid is %d" %(os.getpid(), os.getppid()))
     if (not os.path.exists("result")):
         os.mkdir("result")
+    #creat 4 subprocess
+    i = 0
+    while ( i < 4 ):
+        pid = os.fork()
+        if ( pid == 0 ):
+            break
+        elif ( pid < 0 ):
+            print("fork error")
+        i += 1
 
-    ###multiprocess invoke by os.fork()
-
-    pid_0 = os.fork()
-    pid_1 = os.fork()
-    pid_2 = os.fork()
-
-    if (pid_0 == 0):
-        single_process(1, 100//4)
-        os._exit(0)
-    elif (pid_1 == 0):
-        single_process(100//4, 100//2)
-        os._exit(0)       
-    elif (pid_2 == 0):
-        single_process(100//2, 300//4)
-        os._exit(0)
-    else:
-        single_process(300//4, 100)
-
-    t2 = time.time()
-
-    print("Run_time is %d" %(t2-t1))
-    sys.exit(0)
+    for n in range(4):
+        if ( i == n ):
+            print(f"allot task {n} to subprocess({i}), pid is {os.getpid()}, parent pid is {os.getppid()}")
+            single_process(i*25, (i+1)*25)
+            break
+    if (i == 4):
+        print(f"main process {os.getpid()} is over")
+        os.wait()
+        t2 = time.time()
+        print("Run_time is %d" %(t2-t1))
+        sys.exit(0)
